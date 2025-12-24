@@ -9,8 +9,17 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   networking.hostName = "laptop";
   networking.networkmanager.enable = true;
+
+  hardware.graphics.enable = true;
+  hardware.nvidia.prime = {
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:2:0:0";
+  };
+  hardware.nvidia.modesetting.enable = true;
 
   time.timeZone = "Asia/Tashkent";
 
@@ -31,10 +40,14 @@
   networking.firewall.enable = false;
   services.tumbler.enable = true;
   services.gvfs.enable = true;
-  services.gvfs.enable = true;
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball "https://github.com/PolyMC/PolyMC/archive/develop.tar.gz")).overlay
+  ];
+
 
   environment.systemPackages = with pkgs; [
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    polymc
     vim
     neovim
     wget
@@ -47,14 +60,15 @@
     hyprpolkitagent
     yazi
     zathura
-    vscode
+    #vscode
     btop
     bat
     mpv
     imv
     wiremix
-    swaync 
+    swaynotificationcenter
     waybar
+    home-manager
   ];
 
   fonts.packages = with pkgs; [
@@ -62,26 +76,26 @@
     jetbrains-mono
     noto-fonts
     noto-fonts-cjk-sans
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     font-awesome
-    adwaita-fonts
+    #adwaita-fonts
   ];
 
-  gtk = {
-   enable = true;
-   theme = {
-     name = "Gruvbox-Dark";
-     package = pkgs.gruvbox-gtk-theme;
-   }; 
-   iconTheme = {
-     name = "Papirus-Dark";
-     package = pkgs.papirus-icon-theme;
-   };
-   cursorTheme = {
-     name = "Bibata-Modern-Ice";
-     package = pkgs.bibata-cursors;
-   };  
-  };
+#  gtk = {
+#   enable = true;
+#   theme = {
+#     name = "Gruvbox-Dark";
+#     package = pkgs.gruvbox-gtk-theme;
+#   }; 
+#   iconTheme = {
+#     name = "Papirus-Dark";
+#     package = pkgs.papirus-icon-theme;
+#   };
+#   cursorTheme = {
+#     name = "Bibata-Modern-Ice";
+#     package = pkgs.bibata-cursors;
+#   };  
+#  };
 
   environment.variables = {
     XKB_DEFAULT_LAYOUT = "us";
@@ -92,6 +106,7 @@
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
   system.stateVersion = "25.11";
 }
 
