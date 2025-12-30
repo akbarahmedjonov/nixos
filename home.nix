@@ -1,99 +1,47 @@
-{ config, pkgs, inputs, ... }:
-
+{ config, pkgs, ... }:
 {
-  
-  home.username = "user";
-  home.homeDirectory = "/home/user";
-  home.stateVersion = "25.11"; 
+
+  home.username = "akbar";
+  home.homeDirectory = "/home/akbar";
+  home.stateVersion = "25.11";
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      btw = "echo i use hyprland btw";
+      nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos";
+      vim = "nvim";
+    };
+    initExtra = ''
+      export PS1='\[\e[38;5;76m\]\u\[\e[0m\] in \[\e[38;5;32m\]\w\[\e[0m\] \\$ '
+      nitch
+    '';
+    profileExtra = ''
+      if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+          exec uwsm start -S hyprland-uwsm.desktop
+      fi
+    '';
+  };
 
   home.packages = with pkgs; [
-     inputs.zen-browser.packages.${pkgs.system}.default
-     libnotify
-     nvtopPackages.nvidia
-     swww
-     pavucontrol
-     vscode
-     zellij
-     bibata-cursors
-     telegram-desktop
-     adw-gtk3
-     papirus-icon-theme
-     nwg-look
-     unzip
-     zip
-     wl-clipboard
-     hypridle
-     hyprlock
-     hyprsunset
-     hyprpolkitagent
-     swaynotificationcenter
-     brightnessctl
-     fastfetch
-     waypaper
-     imagemagick
-     manim
-     uv
-     pipx
-     zoxide
-     fuzzel
-     nixd
-     lua-language-server
-     gcc
-     ripgrep
-     nautilus
-     file-roller
-     vscode-css-languageserver
-     htmx-lsp2
-     imv
-     mpv
-     wf-recorder
-     kdePackages.kdenlive
-     onlyoffice-desktopeditors
-     microfetch
-     nerdfetch
-     pfetch
-     neofetch
-     zed-editor
-     wiremix
-     lazygit
-     gzip
-     hyprshot
-     yt-dlp
-     gnome-sound-recorder
-     cmatrix
-     cava
-     pipes
-     asciiquarium-transparent
-     eza
-     cliphist
+    neovim
+    ripgrep
+    nil
+    nixpkgs-fmt
+    nodejs
+    gcc
+    nitch
+    rofi
+    vscode
+    zed-editor
+    (pkgs.writeShellApplication {
+      name = "ns";
+      runtimeInputs = with pkgs; [
+        fzf
+        (nix-search-tv.overrideAttrs {
+          env.GOEXPERIMENT = "jsonv2";
+        })
+      ];
+      text = ''exec "${pkgs.nix-search-tv.src}/nixpkgs.sh" "$@"'';
+    })
   ];
-
-  nixpkgs.config.allowUnfree = true;
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    TERMINAL = "kitty";
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      name = "Gruvbox-Dark";
-      package = pkgs.gruvbox-gtk-theme;
-    };
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-    cursorTheme = {
-      name = "Bibata-Modern-Ice";
-      package = pkgs.bibata-cursors;
-    };
-    font = {
-      name = "JetBrains Mono Regular";
-      size = 11;
-    };
-  };
-
-  programs.home-manager.enable = true;
 }
