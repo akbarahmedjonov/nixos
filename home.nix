@@ -52,5 +52,5 @@
 #      recursive = true;
 #    })
 #    configs;
-];
+  ];
 }

@@ -14,15 +14,15 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
-        #home-manager.nixosModules.home-manager
-        #{
-        #  home-manager = {
-        #    useGlobalPkgs = true;
-        #    useUserPackages = true;
-        #    users.akbar = import ./home.nix;
-        #    backupFileExtension = "backup";
-        #  };
-        #}
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.user = import ./home.nix;
+            backupFileExtension = "backup";
+          };
+        }
       ];
     };
   };

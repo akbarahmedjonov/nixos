@@ -55,11 +55,12 @@
     firefox
     wget
     curl
+    alacritty
     kitty
     waybar
     git
     swww
-    home-manager
+    #home-manager
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
