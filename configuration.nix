@@ -51,7 +51,6 @@
     zoxide
     vim
     adw-bluetooth
-    brave
     firefox
     wget
     curl
