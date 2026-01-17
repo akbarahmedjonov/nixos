@@ -52,12 +52,14 @@
     vim
     adw-bluetooth
     brave
+    firefox
     wget
     curl
     kitty
     waybar
     git
     swww
+    home-manager
   ];
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
